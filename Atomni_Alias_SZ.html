@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<title>Atomni Alias Game – Քո բառերով</title>
+<style>
+body{
+    background:#0f172a;
+    color:#e5e7eb;
+    font-family:Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.card{
+    background:#020617;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    width:380px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+textarea{
+    width:100%;
+    height:80px;
+    margin-top:10px;
+    border-radius:8px;
+    border:none;
+    padding:8px;
+    font-size:14px;
+}
+button{
+    margin-top:10px;
+    padding:8px 12px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    background:#38bdf8;
+    cursor:pointer;
+}
+.word{
+    font-size:28px;
+    margin:15px 0;
+}
+.timer, .score{
+    margin-top:10px;
+    font-size:16px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🎭 Atomni Alias — Քո բառերով</h2>
+
+    <p>Գրի՛ր բառերը ստորակետով ( , )   
+    Բառերը պետք է գրի հակառակորդ թիմը
+    </p>
+    <textarea id="customWords" placeholder="օր․ Կարմիր ակումբ, երաժշտական,քաղաքապետարան"></textarea>
+
+    <div class="word" id="word">Սեղմիր START</div>
+
+    <button onclick="startGame()">START</button>
+    <button onclick="guessed()">✔ Ճիշտ</button>
+    <button onclick="skip()">✖ Բաց թող</button>
+
+    <div class="timer">⏱ Ժամանակ՝ <span id="time">30</span></div>
+    <div class="score">⭐ Միավորներ՝ <span id="score">0</span></div>
+</div>
+
+<script>
+let time = 30;
+let timer;
+let score = 0;
+let words = [];
+
+function startGame(){
+    const input = document.getElementById("customWords").value;
+    words = input.split(",").map(w => w.trim()).filter(w => w !== "");
+
+    if(words.length === 0){
+        alert("Նախ գրի՛ր բառեր 🙂");
+        return;
+    }
+
+    score = 0;
+    document.getElementById("score").innerText = score;
+
+    clearInterval(timer);
+    time = 30;
+    document.getElementById("time").innerText = time;
+
+    newWord();
+
+    timer = setInterval(()=>{
+        time--;
+        document.getElementById("time").innerText = time;
+        if(time === 0){
+            clearInterval(timer);
+            alert("Ժամանակը վերջ 😄");
+        }
+    },1000);
+}
+
+function newWord(){
+    const w = words[Math.floor(Math.random()*words.length)];
+    document.getElementById("word").innerText = w;
+}
+
+function guessed(){
+    score++;
+    document.getElementById("score").innerText = score;
+    newWord();
+}
+
+function skip(){
+    newWord();
+}
+</script>
+</body>
+</html>
